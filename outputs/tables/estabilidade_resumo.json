@@ -1,0 +1,12 @@
+{
+  "observacoes": 187,
+  "companhias": 43,
+  "sementes": 50,
+  "spearman_mediano": 0.9970289107718959,
+  "spearman_minimo": 0.9951038504875963,
+  "jaccard_mediano": 1.0,
+  "jaccard_minimo": 0.8181818181818182,
+  "percentil_minimo_no_grupo": 0.9536898395721933,
+  "percentil_maximo_no_grupo": 0.9989304812834224,
+  "posicoes_selecionadas_em_todas_as_execucoes": 8
+}

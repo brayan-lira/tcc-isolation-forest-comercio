@@ -1,0 +1,7 @@
+Cenario,Spearman com o principal,Jaccard no top 5%
+Sem winsorizacao,0.998,0.818
+"Winsorizacao 2,5%-97,5%",0.995,0.538
+Padronizacao robusta por ano,0.968,0.818
+Maximo de amostras = 64,0.999,1.0
+Maximo de amostras = n,1.0,1.0
+200 arvores,0.999,1.0

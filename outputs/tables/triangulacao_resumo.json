@@ -1,0 +1,23 @@
+{
+  "mscore": {
+    "spearman": 0.094,
+    "p_valor": 0.201,
+    "posicoes_coincidentes": 5,
+    "tamanho_do_grupo": 10,
+    "jaccard": 0.333
+  },
+  "relatorio_auditor": {
+    "observacoes_com_relatorio": 187,
+    "observacoes_sem_relatorio": 0,
+    "opiniao_modificada": 8,
+    "sem_ressalva": 179,
+    "fisher_odds_ratio": 7.125,
+    "fisher_p_valor": 0.061,
+    "significante_a_5pct": false,
+    "mediana_percentil_dentro_do_grupo": 0.976,
+    "mediana_percentil_fora_do_grupo": 0.473,
+    "mediana_percentil_opiniao_modificada": 0.902,
+    "mediana_percentil_sem_ressalva": 0.486,
+    "mannwhitney_p_valor": 0.0
+  }
+}
