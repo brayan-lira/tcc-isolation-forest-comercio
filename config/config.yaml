@@ -1,0 +1,150 @@
+# ---------------------------------------------------------------------------
+# Configuracao unica do estudo.
+# Todo parametro metodologico citado no TCC esta declarado aqui.
+# Nenhum script contem valor "hard-coded": tudo e lido deste arquivo.
+# ---------------------------------------------------------------------------
+
+projeto:
+  titulo: >-
+    Aplicacao do algoritmo "Isolation Forest" na priorizacao de observacoes
+    contabeis atipicas em companhias abertas do comercio brasileiro
+  autor: Brayan Roberto Vieira Lira
+  orientador: Prof. Dr. Renato Maximo Satiro
+  instituicao: MBA USP/ESALQ - Data Science e Analytics
+  ano: 2026
+  repositorio: https://github.com/brayan-lira/tcc-isolation-forest-comercio
+
+# --------------------------- Fonte dos dados -------------------------------
+fonte:
+  base_url_dfp: https://dados.cvm.gov.br/dados/CIA_ABERTA/DOC/DFP/DADOS
+  url_cadastro: https://dados.cvm.gov.br/dados/CIA_ABERTA/CAD/DADOS/cad_cia_aberta.csv
+  # Painel bruto: 2020 e necessario porque os indicadores de 2021 dependem
+  # das contas do exercicio anterior.
+  anos: [2020, 2021, 2022, 2023, 2024, 2025]
+  # Exercicios para os quais o escore e efetivamente produzido.
+  anos_escore: [2021, 2022, 2023, 2024, 2025]
+  data_referencia_coleta: "2026-08-06"
+  encoding: latin1
+  separador: ";"
+
+# ------------------------- Filtros de elegibilidade ------------------------
+filtros:
+  # A grafia exata do cadastro e verificada pela etapa 0; a comparacao
+  # e feita sem acento e sem diferenciar maiusculas de minusculas.
+  setor_cvm: "Comercio (Atacado e Varejo)"
+  tipo_demonstracao: con        # consolidada (con) e nao individual (ind)
+  moeda: REAL
+  escala_moeda: MIL
+  plano_contas_fixo: true       # ST_CONTA_FIXA == 'S'
+  ordem_exercicio: "ULTIMO"     # ultimo exercicio, nao o penultimo
+  manter_maior_versao: true     # mesma companhia + DT_REFER -> maior VERSAO
+  # Janela aceita para contas de fluxo (DRE, DVA, DFC), em dias.
+  janela_dias_min: 330
+  janela_dias_max: 380
+  # Exige mesmo dia e mes de encerramento em anos consecutivos.
+  exigir_mesma_data_fiscal: true
+  imputar_valores_essenciais: false
+
+# ------------------------------ Plano de contas ----------------------------
+# Codigos fixos da CVM utilizados na construcao dos oito componentes.
+contas:
+  ativo_total:          { codigo: "1",       grupo: BPA }
+  ativo_circulante:     { codigo: "1.01",    grupo: BPA }
+  recebiveis:           { codigo: "1.01.03", grupo: BPA }
+  imobilizado:          { codigo: "1.02.03", grupo: BPA }
+  passivo_circulante:   { codigo: "2.01",    grupo: BPP }
+  divida_longo_prazo:   { codigo: "2.02.01", grupo: BPP }
+  receita_liquida:      { codigo: "3.01",    grupo: DRE }
+  resultado_bruto:      { codigo: "3.03",    grupo: DRE }
+  despesas_vendas:      { codigo: "3.04.01", grupo: DRE }
+  despesas_gerais_adm:  { codigo: "3.04.02", grupo: DRE }
+  resultado_liquido:    { codigo: "3.11",    grupo: DRE }
+  depreciacao:          { codigo: "7.04.01", grupo: DVA }
+  fco:                  { codigo: "6.01",    grupo: DFC }
+
+# ------------------------------- Indicadores -------------------------------
+indicadores:
+  componentes: [DSRI, GMI, AQI, SGI, DEPI, SGAI, LVGI, TATA]
+  # Denominador igual a zero produz ausente, sem substituicao arbitraria.
+  denominador_zero_para_nulo: true
+  # Coeficientes originais de Beneish (1999); uso continuo e ordinal.
+  mscore_coeficientes:
+    intercepto: -4.84
+    DSRI:  0.920
+    GMI:   0.528
+    AQI:   0.404
+    SGI:   0.892
+    DEPI:  0.115
+    SGAI: -0.172
+    TATA:  4.679
+    LVGI: -0.327
+  mscore_importar_ponto_de_corte: false   # ver secao de metodos do TCC
+
+# ------------------------- Pre-processamento e modelo ----------------------
+modelo:
+  winsorizacao:
+    aplicar: true
+    limite_inferior: 0.01
+    limite_superior: 0.99
+    apenas_para_ajuste: true   # base processada preserva os valores originais
+  padronizacao: robusta        # (x - mediana) / IQR
+  padronizacao_por_exercicio: false
+  isolation_forest:
+    n_estimators: 500
+    max_samples: 128
+    contamination: auto
+    bootstrap: false
+    n_jobs: -1
+  sementes: 50                 # sementes 0..49
+  inverter_sinal_escore: true  # maior valor = maior atipicidade
+  agregacao: media_dos_percentis
+  cortes_operacionais: [0.03, 0.05, 0.10]
+  corte_referencia: 0.05
+  # Numero de componentes reportados como explicacao de cada prioridade.
+  componentes_explicativos: 3
+
+# --------------------------- Cenarios de sensibilidade ---------------------
+sensibilidade:
+  sementes: 20
+  cenarios:
+    - id: sem_winsorizacao
+      rotulo: "Sem winsorizacao"
+      alteracoes: { winsorizacao_aplicar: false }
+    - id: winsor_2_5
+      rotulo: "Winsorizacao 2,5%-97,5%"
+      alteracoes: { limite_inferior: 0.025, limite_superior: 0.975 }
+    - id: padronizacao_por_ano
+      rotulo: "Padronizacao robusta por ano"
+      alteracoes: { padronizacao_por_exercicio: true }
+    - id: max_samples_64
+      rotulo: "Maximo de amostras = 64"
+      alteracoes: { max_samples: 64 }
+    - id: max_samples_n
+      rotulo: "Maximo de amostras = n"
+      alteracoes: { max_samples: "n" }
+    - id: arvores_200
+      rotulo: "200 arvores"
+      alteracoes: { n_estimators: 200 }
+
+# ------------------------------ Triangulacoes ------------------------------
+triangulacao:
+  mscore: true
+  relatorio_auditor: true
+  # Agrupamento binario do relatorio do auditor independente.
+  # A etapa 0 lista os valores reais da base; acrescente aqui os que faltarem.
+  opiniao_modificada:
+    - "COM RESSALVA"
+    - "ABSTENCAO DE OPINIAO"
+    - "NEGATIVA DE OPINIAO"
+    - "ADVERSA"
+  opiniao_sem_ressalva:
+    - "SEM RESSALVA"
+  teste: fisher_exato
+  alfa: 0.05
+
+# --------------------------------- Saidas ----------------------------------
+saidas:
+  figuras_formato: [png, pdf]
+  figuras_dpi: 300
+  tabelas_formato: csv
+  registrar_hash_sha256: true

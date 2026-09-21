@@ -1,0 +1,27 @@
+# Arquivos brutos da CVM: nao redistribuidos em razao do volume.
+data/raw/*
+!data/raw/.gitkeep
+!data/raw/proveniencia.csv
+
+data/interim/*
+!data/interim/.gitkeep
+
+# A base processada e versionada; apenas os intermediarios sao ignorados.
+data/processed/*.parquet
+
+outputs/logs/*
+!outputs/logs/.gitkeep
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.ipynb_checkpoints/
+.pytest_cache/
+
+# Sistema
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
