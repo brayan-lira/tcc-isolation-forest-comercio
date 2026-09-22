@@ -149,7 +149,7 @@ Essa verificação evita duas falhas silenciosas:
 
 Cadastro de companhias abertas e arquivos anuais das Demonstrações Financeiras Padronizadas (DFP), disponibilizados pela Comissão de Valores Mobiliários em <https://dados.cvm.gov.br>.
 
-Os arquivos referentes ao período de 2020 a 2025 foram obtidos em **6 de agosto de 2026**.
+Os arquivos referentes ao período de 2020 a 2025 foram obtidos em **21 de setembro de 2026**.
 
 Tamanhos e códigos SHA-256 são gravados em `data/raw/proveniencia.csv` pela etapa 1, permitindo identificar precisamente a versão dos dados utilizada na pesquisa.
 
@@ -198,15 +198,18 @@ Os grupos de prioridade não decorrem diretamente do parâmetro de contaminaçã
 
 | Arquivo | Conteúdo |
 |---|---|
-| `tabela2_distribuicao_temporal.csv` | Observações, companhias e cortes por exercício |
-| `tabela3_estatisticas_descritivas.csv` | Estatísticas dos oito componentes |
-| `tabela4_ranking_consensual.csv` | Grupo prioritário de 5% e componentes predominantes |
-| `tabela5_frequencia_componentes.csv` | Frequência dos componentes entre as prioridades |
-| `tabela6_sensibilidade.csv` | Spearman e Jaccard dos seis cenários |
-| `tabela7_tipo_relatorio.csv` | Contingência 2 × 2 com o relatório do auditor |
+| `tabela2_distribuicao_temporal.csv` | Tabela 3 do trabalho — observações, companhias e cortes por exercício |
+| `tabela3_estatisticas_descritivas.csv` | Tabela 4 do trabalho — estatísticas dos oito componentes |
+| `tabela4_ranking_consensual.csv` | Tabela 5 do trabalho — grupo prioritário de 5% e componentes predominantes |
+| `tabela5_frequencia_componentes.csv` | Tabela 6 do trabalho — frequência dos componentes entre as prioridades |
+| `tabela6_sensibilidade.csv` | Tabela 7 do trabalho — Spearman e Jaccard dos seis cenários |
+| `tabela7_tipo_relatorio.csv` | Tabela 8 do trabalho — contingência 2 × 2 com o relatório do auditor |
 | `estabilidade_aleatoria.csv` | Spearman e Jaccard para cada semente |
+| `taxa_selecao_por_posicao.csv` | Taxa de seleção de cada posição do grupo prioritário |
 | `triangulacao_resumo.json` | M-Score e teste exato de Fisher |
 | `leiaute_cvm.csv` | Arquivos e colunas encontrados nos pacotes da CVM |
+
+> **Nota sobre a numeração.** Os nomes dos arquivos seguem a ordem de geração do protocolo. A numeração das tabelas no trabalho é uma unidade maior a partir da terceira, porque a Tabela 2 apresenta os hiperparâmetros do modelo e não decorre de arquivo de saída.
 
 ### Figuras (`outputs/figures/`)
 
